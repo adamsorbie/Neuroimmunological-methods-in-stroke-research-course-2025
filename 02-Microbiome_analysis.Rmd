@@ -11,14 +11,14 @@ knitr::opts_chunk$set(echo = TRUE)
 # Intro to Microbiome analysis
 
 ```{r}
-source("Microbiome_functions.R")
+
 ```
 
 Firstly, we will read the species abundance table(s) and metadata into R, using
 phyloseq. 
 
 ```{r}
-ps <- import_pseq_metag("data/mouse_stool_abundances.txt","data/mouse_stool_metadata.txt", level = "Species")
+
 ```
 
 Phyloseq is used as it provides a nice way of storing all the associated
@@ -34,7 +34,7 @@ perform a method called rarefaction for downstream analyses.
 ### Why do we need to normalise? 
 
 ```{r}
-barplot(sort(sample_sums(ps)), horiz = TRUE, las = 2, xlab=NULL, main="Library sizes")
+
 ```
 ![library_sizes](https://github.com/user-attachments/assets/73a51c10-84b2-4a4e-86bb-b76cabcbca9d)
 
@@ -45,21 +45,21 @@ Relative, transforms each sample into compositions, on a fixed scale of
 0-1 or 0-100.
 
 ```{r}
-ps_rel <- transform(ps)
+
 ```
 
 We can see how this works by looking at the column sums:
 
 ```{r}
-colSums(otu_table(ps_rel))
+
 ```
 Rarefaction, on the other hand, works by choosing a fixed number of samples equal to or less than the sample with the lowest number of reads, then randomly discarding reads from larger samples until the remaining sample size equals this threshold.
 
 ```{r}
-ps_rar <- rarefy_even_depth(ps, rngseed = 42)
+
 ```
 ```{r}
-colSums(otu_table(ps_rar))
+
 ```
 
 ## Alpha Diversity
@@ -74,7 +74,7 @@ requires the rarified phyloseq object as input, returning a
 dataframe with a column for each above-mentioned dataframe.
 
 ```{r}
-alpha_div <- calc_alpha(ps_rar)
+
 ```
 
 ### How are alpha diversity metrics calculated?
@@ -109,7 +109,7 @@ comparisons to define like so:
 
 
 ```{r}
-head(alpha_div)
+
 ```
 
 
@@ -117,14 +117,14 @@ head(alpha_div)
 Comparisons list
 
 ```{r}
-comparisons <- list(c("Stroke", "Sham"))
+
 ```
 
 We can also specify the colours we want to use in our plots here by
 creating a named vector of colours.
 
 ```{r}
-colour_pal <- c("sham" = "#98C1D9", "stroke"= "#EE6C4D")
+
 ```
 
 To generate the plot we need to provide the dataframe, the name of the
@@ -141,17 +141,13 @@ explicitly with the `group.order`parameter.
 #### Richness
 
 ```{r}
-plot_boxplot(alpha_div, variable_col = "condition", value_col = "Richness", 
-             comparisons_list = comparisons, fill_var = "condition", 
-             group.order = c("sham", "stroke"), cols = colour_pal)
+
 ```
 ![richness](https://github.com/user-attachments/assets/6fbb9f26-d19f-48e1-81a5-b615e5770e93)
 
 
 ```{r}
-plot_boxplot(alpha_div, variable_col = "condition", value_col = "Shannon.Effective", 
-             comparisons_list = comparisons, fill_var = "condition", 
-             group.order = c("sham", "stroke"), cols = colour_pal)
+
 ```
 ![shannon_e](https://github.com/user-attachments/assets/0cb5fbaa-78a6-4909-82c9-ca0dfe34ed85)
 
@@ -176,17 +172,7 @@ we need to supply the group column (without quotes),
 the number of species we would like to plot and can additionally specify several additional 
 parameters to customise the order and calculation of the most abundant taxa.
 ```{r}
-p <-
-  plot_taxonomic_comp(
-    ps_rel,
-    "Species",
-    condition,
-    n_taxa = 12,
-    ord = c("sham", "stroke"),
-    per_group = T,
-    groups = c("sham", "stroke")
-  )
-print(p)
+
 ```
 
 ![taxonomic_comp](https://github.com/user-attachments/assets/1c2e2b21-b381-401b-8059-431c53a41d95)
@@ -221,7 +207,7 @@ Similarly, there are also various ordination options:
     space.
 
 ```{r}
-beta_div <- calc_betadiv(ps_rar, dist = "bray", ord_method = "NMDS")
+
 ```
 
 To plot beta diversity a convenience function `plot-beta_div` is
@@ -239,7 +225,7 @@ composition explained by the variable being tested, in this case condition. The
 accompanying p-value denotes whether or not this effect is significant. 
 
 ```{r}
-plot_beta_div(ps_rar, beta_div, group_variable = "condition",cols = colour_pal, add_ellipse = T)
+
 ```
 ![betadiv](https://github.com/user-attachments/assets/b2533a80-6402-4a6d-968a-a893d4fdb138)
 
@@ -256,16 +242,10 @@ only the phyloseq object and the column name of the grouping variable is
 required.
 
 ```{r}
-da_taxa <- maaslin2_tax(
-    ps_rel,
-    out = "microbiome_DA_results",
-    fixed = "condition",
-    abun_thresh = 1e-4,
-    prev_thresh = 0.3
-)$results
+
 ```
 
 ```{r}
-plot_da(da_taxa, groups = c("sham", "stroke"), cols = colour_pal)
+
 ```
 
