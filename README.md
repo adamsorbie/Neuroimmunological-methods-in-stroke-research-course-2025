@@ -514,10 +514,9 @@ What do you interpret from this plot?
 The final step of this pipeline is to calculate differentially abundant
 taxa between conditions.
 
-This function performs the ancom-bc test, a compositionally aware
-differential abundance method and returns significant results. As input,
-only the phyloseq object and the column name of the grouping variable is
-required.
+This function runs maaslin2 on our data. As input,
+the phyloseq object, a folder name for the output, and the column name of the grouping variable is
+required (fixed). If necessary we can also specify cutoffs for abundance and prevalence. 
 
 ``` r
 da_taxa <- maaslin2_tax(
